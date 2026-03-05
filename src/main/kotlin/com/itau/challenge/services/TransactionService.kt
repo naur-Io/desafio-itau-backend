@@ -30,4 +30,8 @@ class TransactionService {
     fun clearTransactions() {
         transactions.clear()
     }
+
+    fun getAllTransactions(): List<Transaction> {
+        return transactions
+    }
 }
