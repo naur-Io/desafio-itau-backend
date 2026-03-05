@@ -27,9 +27,7 @@ class TransactionService {
         transactions.add(transaction)
     }
 
-
     fun clearTransactions() {
         transactions.clear()
     }
-
 }
