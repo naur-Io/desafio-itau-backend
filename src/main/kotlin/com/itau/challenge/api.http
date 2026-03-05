@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:8080
+
+### ==========================================
+### TESTE 1: O Caminho Feliz (Criar Transação)
+### ==========================================
+POST {{baseUrl}}/transacao
+Content-Type: application/json
+
+{
+  "valor": 150.50,
+  "dataHora": "{{$isoTimestamp}}"
+}
+
+### ==========================================
+### TESTE 2: Calcular Estatísticas (Sucesso)
+### ==========================================
+GET {{baseUrl}}/estatistica
+
+
+### ==========================================
+### TESTE 3: Regra de Negócio - Data no Futuro
+### ==========================================
+POST {{baseUrl}}/transacao
+Content-Type: application/json
+
+{
+  "valor": 200.00,
+  "dataHora": "2030-12-31T23:59:59.000-03:00"
+}
+
+
+### ==========================================
+### TESTE 4: Regra de Negócio - Valor Negativo
+### ==========================================
+POST {{baseUrl}}/transacao
+Content-Type: application/json
+
+{
+  "valor": -50.00,
+  "dataHora": "2026-03-05T18:55:00.000-03:00"
+}
+
+
+### ==========================================
+### TESTE 5: Limpar Transações em Memória
+### ==========================================
+DELETE {{baseUrl}}/transacao
+
+
+### ==========================================
+### TESTE 6: Estatísticas após a Limpeza
+### ==========================================
+GET {{baseUrl}}/estatistica
