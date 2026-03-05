@@ -8,24 +8,15 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 
 @Service
-class StatisticService {
-
-    private val transactions = CopyOnWriteArrayList<Transaction>()
-
-
+class StatisticService(
     private val transactionService: TransactionService
-
-    constructor(transactionService: TransactionService) {
-        this.transactionService = transactionService
-    }
-
+) {
     fun getStatistic(): Statistic {
         val currentTime = OffsetDateTime.now().minusSeconds(60)
-        val recentTransactions = transactions.filter { it.date.isAfter(currentTime) }
 
-        val stats = recentTransactions.stream()
-            .mapToDouble { it.amount }
-            .summaryStatistics()
+        val recentTransactions = transactionService.getAllTransactions().filter { it.date.isAfter(currentTime) }
+
+        val stats = recentTransactions.stream().mapToDouble { it.amount }.summaryStatistics()
 
         if (stats.count == 0L) {
             return Statistic(
@@ -35,8 +26,8 @@ class StatisticService {
                 max = 0.0,
                 min = 0.0
             )
-
         }
+
         return Statistic(
             count = stats.count,
             sum = stats.sum,
@@ -45,5 +36,6 @@ class StatisticService {
             min = stats.min
         )
     }
+
 
 }
