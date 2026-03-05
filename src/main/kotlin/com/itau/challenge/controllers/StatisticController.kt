@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus
 
 
 @RestController
-@RequestMapping("estatistica")
+@RequestMapping("/estatistica")
 class StatisticController(
     private val statisticService: StatisticService
 ) {
