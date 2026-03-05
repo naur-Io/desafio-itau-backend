@@ -9,7 +9,7 @@ data class Transaction (
     val amount: Double,
 
     @JsonProperty("dataHora")
-    val date: OffsetDateTime
+    val date: OffsetDateTime,
 )
 
 
