@@ -7,7 +7,7 @@ POST {{baseUrl}}/transacao
 Content-Type: application/json
 
 {
-  "valor": 150.50,
+  "valor": 350.50,
   "dataHora": "{{$isoTimestamp}}"
 }
 
@@ -51,3 +51,15 @@ DELETE {{baseUrl}}/transacao
 ### TESTE 6: Estatísticas após a Limpeza
 ### ==========================================
 GET {{baseUrl}}/estatistica
+
+
+### ==========================================
+### TESTE 7: Regra de Negócio - Valor Não Numérico
+### ==========================================
+POST http://localhost:8080/transacao
+Content-Type: application/json
+
+{
+  "valor": "ISSO NAO E UM NUMERO",
+  "dataHora": "2026-03-05T18:55:00.000-03:00"
+}
