@@ -17,7 +17,7 @@ class StatisticServiceTest {
     }
 
     @Test
-    fun `deve retornar estatisticas zeradas quando nao houver transacoes`() {
+    fun shouldreturnstatiscticsEmptyWhenDontHaveTransactions() {
         val stats = statisticService.getStatistic()
 
         assertEquals(0L, stats.count)
@@ -28,7 +28,7 @@ class StatisticServiceTest {
     }
 
     @Test
-    fun `deve calcular estatisticas apenas dos ultimos 60 segundos`() {
+    fun shouldcalculateStatisticsForLast60Seconds() {
         transactionService.addTransaction(Transaction(100.0, OffsetDateTime.now()))
         transactionService.addTransaction(Transaction(50.0, OffsetDateTime.now().minusSeconds(30)))
         transactionService.addTransaction(Transaction(1000.0, OffsetDateTime.now().minusMinutes(2)))
