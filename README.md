@@ -1,58 +1,57 @@
-# Desafio Backend Itaú - API de Transações
-
+# Itaú Backend Challenge - Transaction API
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![JUnit5](https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
 
-API RESTful desenvolvida para o [Desafio de Programação do Itaú Unibanco](https://github.com/feltex/desafio-itau-backend). O sistema recebe transações financeiras e calcula estatísticas em tempo real, mantendo um limite rigoroso de processamento apenas para os últimos 60 segundos.
+RESTful API developed for the [Itaú Unibanco Programming Challenge](https://github.com/feltex/desafio-itau-backend)
 
-## Tecnologias e Decisões de Arquitetura
+## Technologies and Architectural Decisions
 
-Neste projeto, optei por focar fortemente em **performance, segurança de concorrência e boas práticas de engenharia**:
+For this project, I chose to focus heavily on **performance, concurrency safety, and engineering best practices**:
 
-* **Armazenamento em Memória (Thread-Safe):** Como exigido pelo desafio, não utilizei banco de dados. 
-* Para garantir a segurança em um ambiente concorrente (múltiplas requisições simultâneas) uma lista de transações foi implementada utilizando `CopyOnWriteArrayList`.
-* **Cálculo O(N) Otimizado:** As estatísticas foram calculadas utilizando a API de Streams do Java junto com o `DoubleSummaryStatistics`, que garantiu a precisão e baixa alocação de memória.
-* **Validações e Tratamento de Erros:** Implementação de um `@RestControllerAdvice` global para interceptar exceções como datas no futuro ou valores negativos para  retornar respostas limpas (`422 Unprocessable Entity` e `400 Bad Request` sem corpo) em  conformidade com os requisitos do desafio.
-* **Observabilidade:** Logs estruturados utilizando a biblioteca SLF4J nos services para rastreabilidade de eventos e regras de negócio.
-* **Testes Automatizados:** Cobertura de testes unitários com JUnit 5 para as regras de negócio de estatísticas e transações, validando o comportamento da janela de tempo de 60 segundos.
-* **Containerização:** Dockerfile otimizado com *Multi-stage Build* (compilação com JDK) para garantir uma imagem pronta para produção.
+* **In-Memory Storage (Thread-Safe):** As required by the challenge, no database was used.
+* To ensure safety in a concurrent environment (multiple simultaneous requests), the transaction list was implemented using `CopyOnWriteArrayList`.
+* **Optimized O(N) Calculation:** Statistics were calculated using the Java Streams API combined with `DoubleSummaryStatistics`, ensuring precision and low memory allocation.
+* **Validation and Error Handling:** Implementation of a global `@RestControllerAdvice` to intercept exceptions—such as future dates or negative values—and return clean responses (`422 Unprocessable Entity` and `400 Bad Request` with no body) in compliance with the challenge requirements.
+* **Observability:** Structured logging using the SLF4J library within services to ensure traceability of events and business logic.
+* **Automated Testing:** Unit test coverage using JUnit 5 for statistics and transaction business logic, validating the behavior of the 60-second time window.
+* **Containerization:** Optimized Dockerfile using a *Multi-stage Build* (compilation with JDK) to ensure a production-ready image.
 
-## Como Executar
+## How to Run
 
-Você pode rodar a aplicação de duas formas:
+You can run the application in two ways:
 
-### Opção 1: Usando Docker (Recomendado)
-Certifique-se de ter o Docker instalado e rodando. No terminal, na raiz do projeto:
+### Option 1: Using Docker (Recommended)
+Ensure Docker is installed and running. In the terminal, at the project root:
 ```bash
-# 1. Construir a imagem
+# 1. Build the image
 docker build -t itau-challenge-api .
 
-# 2. Rodar o container
+# 2. Run the container
 docker run -p 8080:8080 itau-challenge-api
 
-### Opção 2: Usando Gradle local
+### Option 2: Using local Gradle
 ./gradlew bootRun
-A API disponível em http://localhost:8080.
+The API is available at http://localhost:8080.
 ```
 
 ## Endpoints
-Criar Transação
+Create Transaction
 -    POST /transacao
 ````json
 {
-    "valor": 150.50,
-    "dataHora": "2026-03-07T12:00:00.000-03:00"
+"valor": 150.50,
+"dataHora": "2026-03-07T12:00:00.000-03:00"
 }
 
-Respostas: 
-201 Created (Sucesso)
-422 Unprocessable Entity (Regra de negócio violada) 
-400 Bad Request (JSON inválido)
+Responses:
+201 Created (Success)
+422 Unprocessable Entity (Business rule violated)
+400 Bad Request (Invalid JSON)
 ````
 
-2. Obter Estatísticas (Últimos 60 segundos)
+2. Get Statistics (Last 60 seconds)
 - GET /estatistica
 ````json
 {
@@ -63,12 +62,12 @@ Respostas:
 "max": 150.50
 }
 
-Resposta:
+Response:
 200 OK
 ````
 
-3. Limpar Transações
+3. Clear Transactions
 - DELETE /transacao
 ````json
-Resposta: 200 OK 
+Response: 200 OK
 ````
